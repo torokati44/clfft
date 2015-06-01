@@ -85,10 +85,10 @@ int main() {
                             alpha /= 1.0001;
                             break;
                         case SDL_SCANCODE_LEFT:
-                            freq -= 1000;
+                            freq -= 100;
                             break;
                         case SDL_SCANCODE_RIGHT:
-                            freq += 1000;
+                            freq += 100;
                             break;
                         default:
                             break;
@@ -125,10 +125,10 @@ int main() {
         Uint32 ticks1 = SDL_GetTicks();
 
         for (int i = 0; i < samples_per_frame; ++i) {
-            float sample = cosf(freq * (samples_per_frame * frame + i) / sample_rate);
+            float sample = cosf(2.0f * 3.1415926536f * freq * (samples_per_frame * frame + i) / sample_rate);
 
             if (paused) {
-                sample += cosf((freq-10000) * (samples_per_frame * frame + i) / sample_rate);
+                sample += cosf(2.0f * 3.1415926536f *  (freq-1000) * (samples_per_frame * frame + i) / sample_rate);
             }
 
             add_sample(sample, alpha);

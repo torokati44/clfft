@@ -3,7 +3,7 @@ kernel void fill_cos_sin(global float2 *cos_sin_buffer) {
     int id = get_global_id(0);
     float t = (float)id / get_global_size(0);
     float cost;
-    float sint = sincos(t * 3.1415926538f * 2.0f, &cost);
+    float sint = sincos(t * 3.1415926536f * 2.0f, &cost);
     cos_sin_buffer[id].x = cost;
     cos_sin_buffer[id].y = sint;
 }
