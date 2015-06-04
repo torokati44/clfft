@@ -20,11 +20,13 @@
 
 #include "clwrapper.hpp"
 
+#include <stdexcept>
+
 CLWrapper *CLWrapper::instance = 0;
 
 CLWrapper::CLWrapper(cl_device_type device_type) : _device_type(device_type) {
     if (instance) {
-        throw "Only one instance plz!";
+        throw std::logic_error("More than one CLWrapper instance created.");
     }
 
     createPlatform();
@@ -74,15 +76,14 @@ void CLWrapper::createDevice() {
 void CLWrapper::createContext() {
     _context = clCreateContext(0, 1, &_device_id, NULL, NULL, NULL);
     if (!_context) {
-        std::cerr << "Context creation failed!" << std::endl;
-        exit(EXIT_FAILURE);
+        throw std::runtime_error("Context creation failed!");
     }
 }
 
 void CLWrapper::createCommandQueue() {
     _cqueue = clCreateCommandQueue(_context, _device_id, 0, NULL);
     if (!_cqueue) {
-        std::cerr << "Command queue creation failed!" << std::endl;
+        throw std::runtime_error("Command queue creation failed!");
     }
 }
 
@@ -157,25 +158,17 @@ cl_kernel CLWrapper::createKernel(cl_program program, const char *kernelName) {
 
     switch (err) {
         case CL_INVALID_PROGRAM:
-            std::cout << "program is not a valid program object.\n";
-            break;
+            throw std::runtime_error("program is not a valid program object.");
         case CL_INVALID_PROGRAM_EXECUTABLE:
-            std::cout << "there is no successfully built executable for program.\n";
-            break;
+            throw std::runtime_error("there is no successfully built executable for program.");
         case CL_INVALID_KERNEL_NAME:
-            std::cout << "kernel_name is not found in program.\n";
-            break;
+            throw std::runtime_error("kernel_name is not found in program.");
         case CL_INVALID_KERNEL_DEFINITION:
-            std::cout <<
-            "the function definition for __kernel function given by kernel_name such as the number of arguments, the argument types are not the same for all devices for which the program executable has been built.\n";
-            break;
+            throw std::runtime_error("the function definition for __kernel function given by kernel_name such as the number of arguments, the argument types are not the same for all devices for which the program executable has been built.");
         case CL_INVALID_VALUE:
-            std::cout << "kernel_name is NULL.\n";
-            break;
+            throw std::runtime_error("kernel_name is NULL.");
         case CL_OUT_OF_HOST_MEMORY:
-            std::cout <<
-            "there is a failure to allocate resources required by the OpenCL implementation on the host.\n";
-            break;
+            throw std::runtime_error("there is a failure to allocate resources required by the OpenCL implementation on the host.");
     }
 
 

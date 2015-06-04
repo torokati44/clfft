@@ -27,10 +27,11 @@
 #include <CL/opencl.h>
 #include <CL/cl_platform.h>
 
-#define CL_SAFE_CALL(call) { \
-    cl_int err = call; \
+#define REPORT_ERROR(CALL, FILE, LINE) throw std::runtime_error("Unsuccesful OpenCL call (" #CALL ")" #FILE " : " #LINE);
+#define CL_SAFE_CALL(CALL) { \
+    cl_int err = CALL; \
     if(CL_SUCCESS != err){ \
-      std::cout << "Unsuccesful OpenCL call " << __FILE__ << " : " << __LINE__ << std::endl; \
+        REPORT_ERROR(CALL, __FILE__, __LINE__) \
     } \
 }
 

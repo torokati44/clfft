@@ -14,17 +14,32 @@ kernel void increment_indices(global int *index_buffer) {
     index_buffer[id] %= get_global_size(0) * 2;
 }
 
-kernel void add_sample(
-        float sample,
+kernel void add_samples(
+        int num_samples,
+        global float *samples,
         float alpha,
         global int *index_buffer,
         global float4 *spectrum_buffer,
         global float2 *cos_sin_buffer) {
     int id = get_global_id(0);
+    int sample_rate = get_global_size(0) * 2;
 
-    float2 product = cos_sin_buffer[index_buffer[id]] * sample;
-    float2 element = spectrum_buffer[id].xy * alpha + product * (1.0f - alpha);
+    float beta = 1.0f - alpha;
+    float2 element = spectrum_buffer[id].xy;
+    int index = index_buffer[id];
 
+    for (int i = 0; i < num_samples; ++i) {
+        float2 product = cos_sin_buffer[index] * samples[i];
+        //element *= alpha;
+        element += product;// * beta;
+
+        index += id;
+        index %= sample_rate;
+
+        element *= alpha;
+    }
+
+    index_buffer[id] = index;
     float len = length(element.xy);
     float ang = atan2(element.y, element.x);
 
