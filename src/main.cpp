@@ -20,7 +20,6 @@ CLBuffer<cl_float2> cos_sin_buffer{sample_rate};
 CLKernel<cl_mem> fill_cos_sin_kernel{"fill_cos_sin"};
 
 CLBuffer<cl_int> index_buffer{sample_rate / 2};
-CLKernel<cl_mem> increment_indices_kernel{"increment_indices"};
 
 CLBuffer<cl_float> samples_buffer{max_samples};
 CLBuffer<cl_float4> spectrum_buffer{sample_rate / 2};
@@ -99,7 +98,7 @@ int main() {
                     std::cout << std::setprecision(10) << "freq = " << freq << ", alpha = " << alpha << std::endl;
                     break;
                 default:
-                    // ignoring any other king of event
+                    // ignoring any other kind of event
                     break;
             }
         }

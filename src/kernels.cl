@@ -8,12 +8,6 @@ kernel void fill_cos_sin(global float2 *cos_sin_buffer) {
     cos_sin_buffer[id].y = sint;
 }
 
-kernel void increment_indices(global int *index_buffer) {
-    int id = get_global_id(0);
-    index_buffer[id] += id;
-    index_buffer[id] %= get_global_size(0) * 2;
-}
-
 kernel void add_samples(
         int num_samples,
         global float *samples,
