@@ -18,4 +18,4 @@ set(SOURCE_FILES
 
 
 add_executable(clfft ${SOURCE_FILES})
-target_link_libraries (clfft OpenCL sfml-audio sfml-window sfml-system GL GLU)
+target_link_libraries (clfft OpenCL sfml-audio sfml-graphics sfml-window sfml-system GL GLU)
